@@ -1,187 +1,137 @@
-# AI StudyHub
+# 🎓 AI StudyHub
 
-AI StudyHub is a full-stack learning workspace for organizing study documents, collaborating in workspaces, discovering public libraries, and using Gemini-powered document chat and flashcard generation.
+<p align="center">
+  <img src="https://img.shields.io/badge/React-19.0.0-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" />
+  <img src="https://img.shields.io/badge/Vite-8.0-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Node.js-Express_5-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
+  <img src="https://img.shields.io/badge/Google_Gemini-AI_RAG-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini AI" />
+  <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License" />
+</p>
 
-The repository contains:
+**AI StudyHub** is an end-to-end, production-grade learning workspace powered by Google Gemini AI. It enables students and educators to organize study documents, collaborate in private workspaces, publish study materials to public libraries, chat with documents using RAG vector search, generate flashcards, and track learning progress.
 
-- A React 19 + Vite frontend in `FE/`
-- An Express 5 backend in `BE/`
-- Supabase-backed data and file storage
-- Google sign-in, email/OTP registration, JWT access tokens, and refresh-token cookies
-- AI document processing, semantic retrieval, moderation, and study tools
-- Administrative dashboards for users, content, activity, storage, and AI usage
+---
 
-For the complete architecture, workflows, API catalog, data dependencies, and implementation notes, see [PROJECT_DOCUMENTATION.md](PROJECT_DOCUMENTATION.md).
+## 🌟 Key Features
 
-## Main Features
+- **🔐 Robust Authentication & Security**: Email/OTP verification, Google OAuth 2.0, JWT Access Tokens, HttpOnly Refresh Cookies, and password recovery.
+- **📚 Smart Library & Workspace Management**: Personal study libraries (public/private) and collaborative workspaces with role-based permissions (`Admin`, `Editor`, `Contributor`, `Viewer`).
+- **📄 Full Document Processing**: Upload PDF, DOCX, TXT, MD, CSV, Audio, and Code files. File duplication detection and 1-click replacement.
+- **🤖 Gemini AI-Powered RAG Chatbot**: Chat with your study documents using 768-dimensional vector embeddings (`pgvector` + `match_document_chunks`).
+- **🎴 AI Flashcards & Study Tools**: Auto-generate flashcards from study sources tailored to primary document language.
+- **🔔 Real-Time In-App Notifications**: Real-time notifications for file uploads, file deletions, workspace role changes, and admin reviews.
+- **🛡️ Admin Observability Dashboard**: Full management of users, document moderation queue, activity audit logs, and AI token consumption metrics.
+- **🌓 Dynamic UI Aesthetics**: High-contrast glassmorphism dark/light themes, sleek modals, and responsive layouts.
 
-- Email/OTP registration, password login, Google OAuth, and password recovery
-- Persistent sessions with short-lived access tokens and HttpOnly refresh cookies
-- Personal document libraries with public/private visibility
-- PDF, DOCX, and TXT upload, download, tagging, and deletion
-- AI-assisted document moderation, metadata generation, embeddings, and semantic search
-- Document-grounded chatbot and generated flashcards
-- Shared workspaces with `Admin`, `Editor`, and `Viewer` membership
-- Guest browsing of public libraries
-- User search and public profile pages
-- System-admin dashboard, moderation queue, user status management, logs, and usage metrics
-- Light/dark theme and local interface preferences
+---
 
-## Technology Stack
+## 🛠️ Technology Stack
 
 | Layer | Technologies |
-| --- | --- |
-| Frontend | React 19, React Router 7, Vite 8, Axios, React Icons |
-| Backend | Node.js, Express 5, Multer, JWT, bcrypt, Nodemailer |
-| Database and storage | Supabase PostgreSQL, Supabase Storage, pgvector-compatible embeddings |
-| AI | Google Gemini text and embedding models |
-| Authentication | Email/OTP, username/password, Google OAuth, JWT access/refresh tokens |
-| Document parsing | `pdf-parse`, `mammoth`, plain-text decoding |
-| Testing and quality | Jest, ESLint, Vite production build |
+| :--- | :--- |
+| **Frontend** | React 19, React Router 7, Vite 8, Axios, Vanilla CSS (Glassmorphism & High-contrast themes) |
+| **Backend** | Node.js, Express 5, Multer, JWT, bcrypt, Nodemailer, Resend API |
+| **Database & Storage** | Supabase PostgreSQL, `pgvector` Semantic Search, Supabase Storage Buckets |
+| **AI Infrastructure** | Google Gemini Text & Embedding Models (`gemini-2.5-flash`, `text-embedding-004`) |
+| **Document Parsing** | `pdf-parse`, `mammoth`, plain text & code parsing |
 
-## Prerequisites
+---
 
-- Node.js `^20.19.0` or `>=22.12.0`
-- npm
-- A Supabase project with the required tables, storage bucket, and `match_document_chunks` RPC
-- A Google Gemini API key
-- SMTP credentials for OTP and password-reset email
-- A Google OAuth client for Google sign-in
+## 🚀 Quick Start Guide
 
-The SQL schema and migrations are not included in this repository. The required data objects are summarized in [PROJECT_DOCUMENTATION.md](PROJECT_DOCUMENTATION.md#data-and-storage-model).
+### 1. Prerequisites
 
-## Quick Start
+- **Node.js** `>= 20.19.0` or `>= 22.12.0`
+- **npm** `>= 10.0.0`
+- A Supabase Project (PostgreSQL + Storage Bucket)
+- A Google Gemini API Key
 
-### 1. Install dependencies
+---
+
+### 2. Database Setup (1-Click SQL)
+
+1. Open your **Supabase Dashboard** -> **SQL Editor**.
+2. Run the complete production DDL script provided in **`database_schema.sql`**.  
+   *This initializes all 17 production tables, vector search functions (`match_document_chunks`), schema permissions, and RLS configurations.*
+
+---
+
+### 3. Installation
+
+Clone the repository and install dependencies for both Frontend and Backend:
 
 ```bash
+# Clone the repository
+git clone https://github.com/your-username/AI-Study-Hub.git
+cd AI-Study-Hub
+
+# Install Backend dependencies
 cd BE
 npm install
 
+# Install Frontend dependencies
 cd ../FE
 npm install
 ```
 
-The root `package.json` is not an application runner; install and run each application from its own directory.
+---
 
-### 2. Configure the backend
+### 4. Environment Configuration
 
-Create `BE/.env`:
-
-```dotenv
-PORT=5000
-NODE_ENV=development
-FRONTEND_URL=http://localhost:5173
-
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-SUPABASE_DOCUMENT_BUCKET=documents
-
-JWT_SECRET=replace-with-a-long-random-secret
-
-GOOGLE_CLIENT_ID=your-google-oauth-client-id
-
-EMAIL_HOST=your-smtp-host
-EMAIL_PORT=2525
-EMAIL_USER=your-smtp-user
-EMAIL_PASS=your-smtp-password
-
-GEMINI_API_KEY=your-gemini-api-key
-GEMINI_TEXT_MODEL=gemini-2.5-flash
-GEMINI_EMBEDDING_MODEL=gemini-embedding-001
+#### Backend Configuration (`BE/.env`):
+Copy `BE/.env.example` to `BE/.env` and update your keys:
+```bash
+cp BE/.env.example BE/.env
 ```
 
-Never commit `.env` files or a Supabase service-role key.
-
-### 3. Configure the frontend
-
-Create `FE/.env`:
-
-```dotenv
-VITE_API_BASE_URL=http://localhost:5000/api
+#### Frontend Configuration (`FE/.env`):
+Copy `FE/.env.example` to `FE/.env` and update your API URL:
+```bash
+cp FE/.env.example FE/.env
 ```
 
-The frontend Google OAuth client is currently declared directly in:
+---
 
-- `FE/src/components/pages/LoginPage/LoginPage.jsx`
-- `FE/src/components/pages/RegisterPage/RegisterGoogle.jsx`
+### 5. Running locally
 
-It must match `GOOGLE_CLIENT_ID` on the backend. Moving it to a `VITE_GOOGLE_CLIENT_ID` variable is recommended before deployment.
-
-### 4. Run the applications
-
-Start the backend:
-
+Start the Backend server:
 ```bash
 cd BE
 node server.js
 ```
 
-Start the frontend in another terminal:
-
+Start the Frontend dev server in a new terminal:
 ```bash
 cd FE
 npm run dev
 ```
 
-Open `http://localhost:5173`. The backend defaults to `http://localhost:5000`, and `GET /` can be used as a basic health check.
+Open `http://localhost:5173` in your browser.
 
-## Available Commands
+---
 
-### Frontend
-
-```bash
-npm run dev       # Start the Vite development server
-npm run build     # Create a production build in FE/dist
-npm run lint      # Run ESLint
-npm run preview   # Preview the production build
-```
-
-### Backend
-
-```bash
-node server.js       # Start the API server
-npm test             # Run Jest once
-npm run test:watch   # Run Jest in watch mode
-npm run test:coverage
-```
-
-## Repository Layout
+## 📁 Repository Layout
 
 ```text
-AI-student-hub/
-├── BE/
-│   ├── server.js
-│   └── src/
-│       ├── config/
-│       ├── controllers/
-│       ├── middleware/
-│       ├── routes/
-│       ├── services/
-│       └── utils/
-├── FE/
-│   ├── public/
-│   └── src/
-│       ├── assets/
-│       ├── components/
-│       ├── context/
-│       └── utils/
-├── tools/srs_rewrite/
-├── PROJECT_DOCUMENTATION.md
-├── LICENSE
-└── README.md
+AI-Study-Hub/
+├── BE/                           # Express 5 Backend API Server
+│   ├── .env.example              # Sample environment variables
+│   ├── .gitignore                # Git ignore rules for Backend
+│   ├── server.js                 # Server entry point
+│   └── src/                      # Controllers, Services, Middleware, Routes
+├── FE/                           # React 19 + Vite Frontend Application
+│   ├── .env.example              # Sample environment variables
+│   ├── .gitignore                # Git ignore rules for Frontend
+│   └── src/                      # Components, Pages, Context, Utils
+├── database_schema.sql           # Complete Supabase PostgreSQL DDL Script (17 tables)
+├── PROJECT_DOCUMENTATION.md      # Comprehensive Architecture & API Documentation
+├── LICENSE                       # MIT License
+└── README.md                     # Project README
 ```
 
-## Important Development Notes
+---
 
-- Authenticated API requests use `Authorization: Bearer <accessToken>`.
-- The Axios client automatically attempts `/api/auth/refresh` after an eligible `401`.
-- The refresh token is stored as an HttpOnly cookie scoped to `/api/auth`.
-- Uploads accept PDF, DOCX, and TXT files, up to 10 files per request and 20 MB per file on the backend.
-- `ChatBot.jsx` and `Flashcards.jsx` currently contain hard-coded `http://localhost:5000` URLs; replace them with the shared API client before non-local deployment.
-- The UI currently advertises a 50 MB file limit in places while the backend enforces 20 MB per file.
-- Database migrations are not checked in, so a compatible Supabase schema must be created separately.
-
-## License
+## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
