@@ -9,6 +9,8 @@
   <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License" />
 </p>
 
+🔗 **GitHub Repository**: [https://github.com/TrongBVD/AI-Study-Hub](https://github.com/TrongBVD/AI-Study-Hub)
+
 **AI StudyHub** is an end-to-end, production-grade learning workspace powered by Google Gemini AI. It enables students and educators to organize study documents, collaborate in private workspaces, publish study materials to public libraries, chat with documents using RAG vector search, generate flashcards, and track learning progress.
 
 ---
@@ -63,7 +65,7 @@ Clone the repository and install dependencies for both Frontend and Backend:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/AI-Study-Hub.git
+git clone https://github.com/TrongBVD/AI-Study-Hub.git
 cd AI-Study-Hub
 
 # Install Backend dependencies
