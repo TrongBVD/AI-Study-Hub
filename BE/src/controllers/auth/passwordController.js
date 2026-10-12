@@ -32,7 +32,7 @@ exports.forgotPassword = async (req, res) => {
         const transporter = createMailTransporter();
 
         await transporter.sendMail({
-            from: process.env.EMAIL_USER,
+            from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
             to: cleanEmail,
             subject: 'AI StudyHub - Password Reset Code',
             text: `Your password reset code is: ${otpCode}. The code expires in 10 minutes.`

@@ -57,6 +57,20 @@ exports.googleLogin = async (req, res) => {
     } catch (error) {
         console.error("🔴 GOOGLE LOGIN BACKEND ERROR:", error);
         const errMsg = String(error?.message || "").toLowerCase();
+
+        const isEmailError =
+            errMsg.includes("otp verification email") ||
+            errMsg.includes("mailer") ||
+            errMsg.includes("smtp") ||
+            errMsg.includes("send mail");
+
+        if (isEmailError) {
+            return res.status(500).json({
+                status: 'error',
+                message: error.message || 'Could not send OTP verification email. Please check email configuration.'
+            });
+        }
+
         const isTokenError =
             errMsg.includes("token") ||
             errMsg.includes("invalid") ||

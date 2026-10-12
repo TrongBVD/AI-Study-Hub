@@ -215,7 +215,7 @@ async function sendWorkspaceInviteEmail({ to, workspace, inviter, role, inviteUr
   const transporter = createMailTransporter();
 
   await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+    from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
     to,
     subject: `AI StudyHub - Workspace invitation: ${workspaceName}`,
     text: [

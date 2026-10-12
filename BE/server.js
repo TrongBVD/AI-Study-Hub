@@ -7,14 +7,22 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
 const app = express();
-if (process.env.TRUST_PROXY) {
-    const configuredTrustProxy = Number(process.env.TRUST_PROXY);
+const configuredTrustProxy = process.env.TRUST_PROXY;
+if (configuredTrustProxy !== undefined) {
+    const numericTrustProxy = Number(configuredTrustProxy);
     app.set(
         'trust proxy',
-        Number.isFinite(configuredTrustProxy)
-            ? configuredTrustProxy
-            : process.env.TRUST_PROXY,
+        Number.isFinite(numericTrustProxy)
+            ? numericTrustProxy
+            : configuredTrustProxy === 'true'
+            ? true
+            : configuredTrustProxy === 'false'
+            ? false
+            : configuredTrustProxy,
     );
+} else {
+    // Default to 1 (first-hop reverse proxy) for cloud deployments (Render, Vercel, Heroku, AWS)
+    app.set('trust proxy', 1);
 }
 
 // Import routes
@@ -77,6 +85,7 @@ const generalLimiter = rateLimit({
     max: Math.max(1, Number(process.env.GENERAL_RATE_LIMIT_MAX) || 100000000),
     standardHeaders: true,
     legacyHeaders: false,
+    validate: { xForwardedForHeader: false },
     message: { status: 'error', message: 'Too many requests. Please try again later.' },
 });
 
@@ -86,6 +95,7 @@ const authLimiter = rateLimit({
     max: 10,
     standardHeaders: true,
     legacyHeaders: false,
+    validate: { xForwardedForHeader: false },
     message: { status: 'error', message: 'Too many authentication attempts. Please wait 15 minutes and try again.' },
 });
 

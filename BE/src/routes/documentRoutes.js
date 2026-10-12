@@ -58,6 +58,7 @@ const suggestTagsLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
     keyGenerator: (req) => String(req.user.id),
+    validate: { xForwardedForHeader: false },
     message: {
         status: "error",
         message: "Too many AI tag requests. Please wait a minute and try again.",
