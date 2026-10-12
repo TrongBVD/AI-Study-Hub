@@ -4,26 +4,24 @@ const axios = require("axios");
  * Parses sender details into Brevo format { name, email }.
  */
 function parseSender(fromValue) {
-  const fallbackEmail =
+  const verifiedSenderEmail = (
     process.env.BREVO_SENDER_EMAIL ||
     process.env.EMAIL_FROM ||
     process.env.EMAIL_USER ||
-    "no-reply@aistudyhub.com";
-  const defaultName = process.env.BREVO_SENDER_NAME || "AI StudyHub";
+    "buildpc1234@gmail.com"
+  ).trim();
 
-  if (!fromValue) {
-    return { name: defaultName, email: fallbackEmail.trim() };
+  const defaultName = (process.env.BREVO_SENDER_NAME || "AI StudyHub").trim();
+
+  if (fromValue) {
+    const str = String(fromValue).trim();
+    const match = str.match(/^(?:"?([^"]*)"?\s)?<?([^>]+)>?$/);
+    if (match && match[1]) {
+      return { name: match[1].trim(), email: verifiedSenderEmail };
+    }
   }
 
-  const str = String(fromValue).trim();
-  const match = str.match(/^(?:"?([^"]*)"?\s)?<?([^>]+)>?$/);
-  if (match) {
-    const name = (match[1] || "").trim() || defaultName;
-    const email = (match[2] || "").trim() || fallbackEmail;
-    return { name, email };
-  }
-
-  return { name: defaultName, email: str };
+  return { name: defaultName, email: verifiedSenderEmail };
 }
 
 /**

@@ -172,7 +172,6 @@ exports.verifyAndLoginGoogle = async (googleToken) => {
         try {
             const transporter = createMailTransporter();
             await transporter.sendMail({
-                from: process.env.EMAIL_FROM || process.env.EMAIL_USER || "buildpc1234@gmail.com",
                 to: cleanEmail,
                 subject: 'AI StudyHub - Your Verification Code',
                 text: `Your verification code is: ${otpCode}. Code expires in ${OTP_EXPIRY_MINUTES} minutes.`
