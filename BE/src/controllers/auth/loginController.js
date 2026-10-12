@@ -62,7 +62,8 @@ exports.googleLogin = async (req, res) => {
             errMsg.includes("otp verification email") ||
             errMsg.includes("mailer") ||
             errMsg.includes("smtp") ||
-            errMsg.includes("send mail");
+            errMsg.includes("send mail") ||
+            errMsg.includes("brevo");
 
         if (isEmailError) {
             return res.status(500).json({
